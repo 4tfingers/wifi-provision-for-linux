@@ -118,7 +118,7 @@ function SimpleWifiForm() {
                         color: '#94a3b8',
                         fontWeight: '400'
                     }}>
-                        Enter your WiFi credentials to connect your Zephyr device to the network
+                        Enter your WiFi credentials to connect your device to the network
                     </p>
                 </div>
                 
