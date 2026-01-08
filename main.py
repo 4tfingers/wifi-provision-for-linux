@@ -9,7 +9,7 @@ app = Flask(__name__)
 def landing():
     essid = os.popen('sudo iw wlan0 scan | egrep \'SSID\'', 'r')
     essid = essid.read()
-    essid = essid.split('\n')
+    essid = essid.split('\n') # existing connected SSID
     return render_template('index.html', essid = essid)
 
 @app.route("/connect", methods=["POST"])
