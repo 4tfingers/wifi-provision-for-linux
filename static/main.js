@@ -66,7 +66,7 @@ function SimpleWifiForm() {
                     margin: '0 0 12px 0',
                     letterSpacing: '-0.02em'
                 }}>
-                    Flask HTTP Server
+                   A Flask HTTP WiFi Connector
                 </h1>
             </div>
 
@@ -96,7 +96,7 @@ function SimpleWifiForm() {
                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Tux.svg/800px-Tux.svg.png"
                             alt="raspberrypi"
                             style={{
-                                height: '150px',
+                                height: '100px',
                                 width: 'auto'
                             }}
                         />
@@ -123,6 +123,23 @@ function SimpleWifiForm() {
                 </div>
                 
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+					<div>
+						<label style={{
+							display: 'block',
+							marginBottom: '8px',
+							fontSize: '14px',
+							fontWeight: '600',
+							color: '#e2e8f0',
+							textAlign: 'left'
+						}}>
+							SSID Selector
+						</label>
+						<select
+								onChange=
+								style={{}}
+						>
+						</select>		
+					</div>		
                     <div>
                         <label style={{
                             display: 'block',
