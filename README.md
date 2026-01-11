@@ -3,7 +3,7 @@
 <img src="https://i.imgur.com/rklcvAY.png" alt="wifi-provision-for-linux" />
 <br />
 <br /> 
-<img src="https://i.imgur.com/kJrQWY1.png" alt="screenshot" />
+<img src="https://i.imgur.com/kJrQWY1.png" alt="screenshot"  style="width:150px;" />
 <h2 id="usage">Usage</h2>
 <ol>
 <li>Connect to Access point created by the Raspberry Pi.</li>
