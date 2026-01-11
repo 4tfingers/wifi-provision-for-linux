@@ -2,99 +2,161 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask HTTP Server</title>
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
-        <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>WiFi Setup</title>
+    <link href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAA>
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <style>
         body {
             margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
             display: flex;
-            align-items: center;
             justify-content: center;
-            color: #e0e0e0;
-
-            /* fallback dark gradient */
-            background: linear-gradient(135deg, #0f2027 0%, #1c1c2b 50%, #2c5364 100%);
-
-            /* then image overlay */
-            background: url('https://lh3.googleusercontent.com/d/1__gS_m9dJM00zGyqOY8l3Sl1WZ4z5zdD=w2000?authuser=0') no-repeat center center fixed,
-                        linear-gradient(135deg, #0f2027 0%, #1c1c2b 50%, #2c5364 100%);
-            background-size: cover;
+            align-items: center;
+            height: 100vh;
         }
-        
-        .floating-particles {
-            position: fixed;
-            top: 0;
-            left: 0;
+
+        .card {
+            background: white;
+            padding: 20px 30px;
+            width: 320px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .card input {
             width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
         }
-        
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
-            animation: float 8s ease-in-out infinite;
+
+        .card button {
+            width: 100%;
+            padding: 12px;
+            background: #4cb5f9;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
         }
-        
-        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
-        .particle:nth-child(2) { left: 20%; animation-delay: 0.5s; }
-        .particle:nth-child(3) { left: 30%; animation-delay: 1s; }
-        .particle:nth-child(4) { left: 40%; animation-delay: 1.5s; }
-        .particle:nth-child(5) { left: 50%; animation-delay: 2s; }
-        .particle:nth-child(6) { left: 60%; animation-delay: 2.5s; }
-        .particle:nth-child(7) { left: 70%; animation-delay: 3s; }
-        .particle:nth-child(8) { left: 80%; animation-delay: 3.5s; }
-        .particle:nth-child(9) { left: 90%; animation-delay: 4s; }
-        
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            50% {
-                transform: translateY(-100px) rotate(180deg);
-                opacity: 0.4;
-            }
+
+        .card button:hover {
+            background: #3aa8f0;
+         }
+
+        .status {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #d00;
+            min-height: 44px;
+            height: 44px;
         }
-        
-        #root {
-            z-index: 10;
-            position: relative;
-            padding: 2rem;
-            border-radius: 1rem;
-            background: transparent;
-            box-shadow: none;
+
+        select:required:invalid {
+            color: #999; /* Grey color for placeholder look */
+        }
+
+        /* Ensure real options are black (or your default text color) */
+        option {
+            color: black;
         }
     </style>
 </head>
 <body>
-    <div class="floating-particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-    </div>
-    <div id="root"></div>
-    <script type="text/babel" src="{{ url_for('static', filename='main.js') }}"></script>
+
+<div class="card">
+    <h2>WiFi Configuration</h2>
+    <p> Current WiFi Connection: {{conn}}</p>
+    <br>
+    <form id="wifiForm">
+        {% if is_available %}
+        <label for="ssid_select">Available SSIDs:</label><br>
+        <select name="ssid_select" id="ssid_select">
+              <option value="" disabled selected hidden>Choose an option</option>
+           {% for ssid in ssid_list %}
+              <option value="{{ ssid }}">{{ ssid }}</option>
+           {% endfor %}
+        </select>
+        {% else %}
+        <label>Sorry, no SSIDS are in range at the moment.</label><br>
+        <select name="ssid_select" id="ssid_select"></select>
+        {% endif %}
+        <label for="essid">Enter a SSID</label>
+        <input
+            id="essid"
+            type="text"
+            name="essid"
+            placeholder="SSID"
+            required
+        />
+        <label for="epass">Enter the SSID Security Key</label>
+        <input
+            id="epass"
+            type="password"
+            name="epass"
+            placeholder="Password"
+            required
+        />
+        <button id="submit_button" type="submit">CONNECT</button>
+    </form>
+    <div id="status" class="status"></div>
+</div>
+
+<script>
+    const selectElement = document.getElementById('ssid_select');
+    const inputElement = document.getElementById('essid');
+    const formElement = document.getElementById('wifiForm')
+
+    document.getElementById("status").textContent = "";
+
+    selectElement.addEventListener('change', function() {
+        // Get the text of the selected option
+        const selectedOptionText = this.options[this.selectedIndex].text;
+
+        // Update the input box text
+        inputElement.value = selectedOptionText;
+        // Set focus on the input box
+        inputElement.focus();
+    });
+</script>
+
+
+<script>
+        $('#wifiForm').on('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission (page reload)
+            var submitButton = document.getElementById("submit_button");
+            submitButton.disabled = true;
+            var essid = $('#essid').val();
+            var epass = $('#epass').val();
+            $('#status').html('<img src ="/static/images/spinner.gif" alt="Loading..." style="width:32px;height:32px;">>
+            $.ajax({
+                type: 'POST',
+                url: '/content', // Send to the specific processing route
+                contentType: 'application/json;charset=UTF-8',
+                data: JSON.stringify({ 'essid': essid, 'epass': epass }),
+                success: function(response) {
+                    // Update the results div with the response from the server
+                    $('#status').html('<p>' + response.results + '</p>');
+                    document.getElementById("status").style.color = "green";
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+</script>
+
 </body>
 </html>
